@@ -1,6 +1,5 @@
 package steps;
 
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -42,17 +41,12 @@ public class PostGetPutDeleteSteps {
 
     @Then("User validates the response status is {int}")
     public void userValidatesTheResponseStatusIs(int code) {
-        Assert.assertEquals(code, response.statusCode(), "Something was wrong!");
-    }
-
-    @And("User validates the body response with name {string}")
-    public void userValidatesTheBodyResponseWithName(String name) {
-        Assert.assertEquals(response.body().jsonPath().get("data.name[0]"), name, "Something was wrong! Response name not equals with '" + name + "'! ");
+        Assert.assertEquals(response.statusCode(), code, "Something was wrong!");
     }
 
     @And("User validates the response meta pagination {string} is {int}")
     public void userValidatesTheResponseMetaPaginationIs(String meta, int value) {
-        Assert.assertEquals(response.jsonPath().getInt("meta.pagination.'" + meta + "'"), value, "Something was wrong! Please check the value number");
+        Assert.assertEquals(response.jsonPath().getInt("meta.pagination.'" + meta + "'"), value, "Something was wrong! Please check '" + meta + "'");
     }
 
     @And("User validates the list body response equals with {int}")
@@ -81,21 +75,53 @@ public class PostGetPutDeleteSteps {
 
     @And("User validates id is not null")
     public void userValidatesIdIsNotNull() {
-        Assert.assertTrue(response.jsonPath().get("data.id[0]") != null, "data.id" + " is empty");
+        Assert.assertTrue(response.jsonPath().get("data.id") != null, "'data.id'" + " is empty");
+    }
+
+    @And("User validates the body response with array name {string}")
+    public void userValidatesTheBodyResponseWithArrayName(String name) {
+        Assert.assertEquals(response.body().jsonPath().get("data.name[0]"), name, "Something was wrong!");
+    }
+
+    @And("User validates the body response with array gender {string}")
+    public void userValidatesTheBodyResponseWithArrayGender(String gender) {
+        Assert.assertEquals(response.body().jsonPath().get("data.gender[0]"), gender, "Something was wrong!");
+    }
+
+    @And("User validates the body response with array email {string}")
+    public void userValidatesTheBodyResponseWithArrayEmail(String email) {
+        Assert.assertEquals(response.body().jsonPath().get("data.email[0]"), email, "Something was wrong!");
+    }
+
+    @And("User validates the body response with array status {string}")
+    public void userValidatesTheBodyResponseWithArrayStatus(String status) {
+        Assert.assertEquals(response.body().jsonPath().get("data.status[0]"), status, "Something was wrong!");
+    }
+
+    @And("User validates the body response with name {string}")
+    public void userValidatesTheBodyResponseWithName(String name) {
+        Assert.assertEquals(response.body().jsonPath().get("data.name"), name, "Something was wrong!");
     }
 
     @And("User validates the body response with gender {string}")
     public void userValidatesTheBodyResponseWithGender(String gender) {
-        Assert.assertEquals(response.body().jsonPath().get("data.gender[0]"), gender, "Something was wrong! Response name not equals with '" + gender + "'! ");
+        Assert.assertEquals(response.body().jsonPath().get("data.gender"), gender, "Something was wrong!");
     }
 
     @And("User validates the body response with email {string}")
     public void userValidatesTheBodyResponseWithEmail(String email) {
-        Assert.assertEquals(response.body().jsonPath().get("data.email[0]"), email, "Something was wrong! Response name not equals with '" + email + "'! ");
+        Assert.assertEquals(response.body().jsonPath().get("data.email"), email, "Something was wrong!");
     }
 
     @And("User validates the body response with status {string}")
     public void userValidatesTheBodyResponseWithStatus(String status) {
-        Assert.assertEquals(response.body().jsonPath().get("data.status[0]"), status, "Something was wrong! Response name not equals with '" + status + "'! ");
+        Assert.assertEquals(response.body().jsonPath().get("data.status"), status, "Something was wrong!");
+    }
+
+    @Given("User gets new data user with GET request {string} with id {string}")
+    public void userGetsNewDataUserWithGETRequestWithID(String url, String id) {
+        request = given().contentType(ContentType.JSON);
+        response = request.get(BASE_URI + url + id).then().log().all().extract().response();
+
     }
 }
