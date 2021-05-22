@@ -124,4 +124,39 @@ public class PostGetPutDeleteSteps {
         response = request.get(BASE_URI + url + id).then().log().all().extract().response();
 
     }
+
+    @When("User create new data user with PUT request {string} and request body {string}, {string}, {string}, {string}")
+    public void userCreateNewDataUserWithPUTRequestAndRequestBody(String url, String name, String gender, String email, String status) {
+        JSONObject requestParams = new JSONObject();
+
+        requestParams.put("name", name);
+        requestParams.put("gender", gender);
+        requestParams.put("email", email);
+        requestParams.put("status", status);
+
+        request = given().header("Authorization", "Bearer " + TOKEN).contentType(ContentType.JSON).with().body(requestParams);
+        request.body(requestParams.toJSONString());
+        response = request.put(BASE_URI + url);
+        response = request.get().then().log().all().extract().response();
+    }
+
+    @When("User gets data user with DELETE request {string}")
+    public void userGetsDataUserWithDELETERequest(String url) {
+        JSONObject requestParams = new JSONObject();
+        request = given().header("Authorization", "Bearer " + TOKEN).contentType(ContentType.JSON).with().body(requestParams);
+        request.body(requestParams.toJSONString());
+        response = request.delete(BASE_URI + url);
+        response = request.get(BASE_URI + url).then().log().all().extract().response();
+
+    }
+
+    @And("User validates the body response with message {string}")
+    public void userValidatesTheBodyResponseWithMessage(String word) {
+        Assert.assertEquals(response.body().jsonPath().get("data.message"), word, "Something was wrong!");
+    }
+
+    @And("User validates the response code is {int}")
+    public void userValidatesTheResponseCodeIs(int code) {
+        Assert.assertEquals(response.body().jsonPath().getInt("code"), code, "Something was wrong!");
+    }
 }
