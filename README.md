@@ -1,5 +1,4 @@
-# QAE_Shopee
-Shopee online test as QAE - Automate HTTP method of https://gorest.co.in/
+Automate HTTP method of https://gorest.co.in/
 
 There are 5 different scenarios available in the feature file :
 1. GET : To verify total users data, total pages, limit, total list in a page (This scenario is quite often to fail due to frequent changes in response data of https://gorest.co.in/) 
